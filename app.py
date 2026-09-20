@@ -223,10 +223,31 @@ st.markdown(
 .results-html-table th:nth-child(2), .results-html-table td:nth-child(2) { 
     width: 36%; 
 } /* College */
-.results-html-table th:nth-child(3), .results-html-table td:nth-child(3) { 
-    width: 18%; 
-    white-space: nowrap; 
-} /* Branch (Minimized and set to no wrap) */
+.results-html-table th:nth-child(3),
+.results-html-table td:nth-child(3) {
+    width: 18%;
+    min-width: 0 !important;
+    max-width: 18% !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+}
+
+.results-html-table td:nth-child(3) .branch-cell {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: 2.5em !important;
+    max-height: 2.5em !important;
+    overflow: hidden !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    line-height: 1.25 !important;
+    box-sizing: border-box !important;
+}
 .results-html-table th:nth-child(4), .results-html-table td:nth-child(4),
 .results-html-table th:nth-child(5), .results-html-table td:nth-child(5),
 .results-html-table th:nth-child(6), .results-html-table td:nth-child(6),
@@ -303,17 +324,46 @@ st.markdown(
         overflow-wrap: normal !important;
     }
 
+    /* Only Sr. No., College and Branch: allow a maximum of 3 lines */
+    .results-html-table th:nth-child(1),
+    .results-html-table td:nth-child(1),
+    .results-html-table th:nth-child(2),
+    .results-html-table td:nth-child(2),
+    .results-html-table th:nth-child(3),
+    .results-html-table td:nth-child(3) {
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: normal !important;
+        line-height: 1.25 !important;
+        max-height: 3.75em !important;
+        height: 3.75em !important;
+        vertical-align: middle !important;
+    }
+
+    .results-html-table th:nth-child(1),
+    .results-html-table td:nth-child(1) {
+        width: 55px !important;
+        min-width: 55px !important;
+        max-width: 55px !important;
+        text-align: center !important;
+    }
+
     .results-html-table th:nth-child(2),
     .results-html-table td:nth-child(2) {
         width: 360px !important;
         min-width: 360px !important;
-        white-space: nowrap !important;
     }
 
     .results-html-table th:nth-child(3),
     .results-html-table td:nth-child(3) {
         width: 190px !important;
         min-width: 190px !important;
+        max-width: 190px !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
     }
 
     .results-html-table th:nth-child(4),
@@ -378,7 +428,7 @@ if os.path.exists(LOCATION_MAPPING_FILE):
     df.loc[other_mask, "location"] = df.loc[other_mask, "college_code"].map(district_map).fillna(df.loc[other_mask, "location"])
 
 if df.empty:
-    st.error("Something went wrong while loading the predictor database[cite: 5].")
+    st.error("Something went wrong while loading the predictor database.")
     st.stop()
 
 # Clean data
@@ -447,7 +497,7 @@ if not predict:
     )
     st.divider()
     st.subheader("Explore your options")
-    st.write("Use your percentile and preferences to find colleges that may be suitable based on previous CAP cutoff trends[cite: 5].")
+    st.write("Use your percentile and preferences to find colleges that may be suitable based on previous CAP cutoff trends.")
     st.stop()
 
 # Retrieve saved inputs
@@ -569,7 +619,11 @@ for _, row in display_df.iterrows():
         val = str(row[col])
         if col in ["CAP 1", "CAP 2", "CAP 3", "CAP 4"] and val in {"", ".", "nan", "NaN", "None", "<NA>", "-", "/"}:
             val = "/"
-        cells.append(f"<td>{html.escape(val)}</td>")
+        escaped_val = html.escape(val)
+        if col == "Branch":
+            cells.append(f'<td><div class="branch-cell">{escaped_val}</div></td>')
+        else:
+            cells.append(f"<td>{escaped_val}</td>")
     body_rows.append("<tr>" + "".join(cells) + "</tr>")
 
 html_rows.append("<tbody>" + "".join(body_rows) + "</tbody>")
