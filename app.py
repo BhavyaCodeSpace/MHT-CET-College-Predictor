@@ -245,6 +245,96 @@ st.markdown(
     background: rgba(40, 70, 130, 0.15);
 }
 
+/* MOBILE / PORTRAIT MODE
+   Keep desktop unchanged. On phones, stack the four summary cards
+   and keep the results table wide so it can be swiped horizontally. */
+@media screen and (max-width: 768px) {
+
+    .block-container {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .summary-card {
+        width: 100% !important;
+        min-height: 92px !important;
+        padding: 0.9rem 1rem !important;
+        box-sizing: border-box !important;
+    }
+
+    .summary-card .label {
+        font-size: 0.82rem !important;
+        white-space: nowrap !important;
+    }
+
+    .summary-card .value {
+        font-size: 1.55rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    /* Keep the table wide and swipeable on a phone */
+    .results-html-table {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        display: block !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .results-html-table table {
+        width: 950px !important;
+        min-width: 950px !important;
+        table-layout: fixed !important;
+    }
+
+    .results-html-table th,
+    .results-html-table td {
+        white-space: nowrap !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+    }
+
+    .results-html-table th:nth-child(2),
+    .results-html-table td:nth-child(2) {
+        width: 360px !important;
+        min-width: 360px !important;
+        white-space: nowrap !important;
+    }
+
+    .results-html-table th:nth-child(3),
+    .results-html-table td:nth-child(3) {
+        width: 190px !important;
+        min-width: 190px !important;
+    }
+
+    .results-html-table th:nth-child(4),
+    .results-html-table td:nth-child(4),
+    .results-html-table th:nth-child(5),
+    .results-html-table td:nth-child(5),
+    .results-html-table th:nth-child(6),
+    .results-html-table td:nth-child(6),
+    .results-html-table th:nth-child(7),
+    .results-html-table td:nth-child(7) {
+        width: 75px !important;
+        min-width: 75px !important;
+    }
+
+    .results-html-table th:nth-child(8),
+    .results-html-table td:nth-child(8) {
+        width: 145px !important;
+        min-width: 145px !important;
+    }
+}
+
 .stButton > button, .stDownloadButton > button {
     width: 100%;
     min-height: 2.7rem;
@@ -447,7 +537,7 @@ if results.empty:
 # DISPLAY TABLE (CLEAN & NON-OVERLAPPING)
 # ============================================================
 
-st.caption("Following results are based on the latest available CAP cutoff for each college[cite: 5].  A  '/'  means cutoff data was not available for that CAP round.")
+st.caption("Following results are based on the latest available CAP cutoff for each college.  A  '/'  means cutoff data was not available for that CAP round.")
 
 def format_cutoff(val):
     if val is None or pd.isna(val): return "/"
